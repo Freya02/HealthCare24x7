@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "377690767732",
+    "firebase_url": "https://healthcare247-4481d.firebaseio.com",
+    "project_id": "healthcare247-4481d",
+    "storage_bucket": "healthcare247-4481d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377690767732:android:c43da21c23a7c87d",
+        "android_client_info": {
+          "package_name": "com.example.prashantmishra.healthcare247"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377690767732-h74cv7odlol7raf2ftc6sejkp8m3b8ta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.prashantmishra.healthcare247",
+            "certificate_hash": "36cbdca87183c93799189af6323b937d310f8272"
+          }
+        },
+        {
+          "client_id": "377690767732-kjrag125v296sfenavjsubh2vj21fsm7.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "377690767732-kjrag125v296sfenavjsubh2vj21fsm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtA7BRnes4tBG1AMVHXyRhWdZJv_B_kg4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377690767732-kjrag125v296sfenavjsubh2vj21fsm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
