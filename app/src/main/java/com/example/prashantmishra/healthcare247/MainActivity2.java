@@ -30,6 +30,11 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineListener;
@@ -59,6 +64,9 @@ import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -116,20 +124,22 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
             longitude=Double.parseDouble(longi);
 
 
-            List<Address> addresses = null;
+            List<Address> dest_addresses = null;
+            List<Address> src_addresses = null;
             Geocoder geocoder;
             geocoder = new Geocoder(MainActivity2.this);
             try {
-                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                dest_addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                //src_addresses = geocoder.getFromLocation(originLocation.getLongitude(),originLocation.getLatitude(), 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            String complete_add = addresses.get(0).getAddressLine(0);
+            final String dest_add = dest_addresses.get(0).getAddressLine(0);
+            //final String src_add = src_addresses.get(0).getAddressLine(0);
             AlertDialog.Builder alert=new AlertDialog.Builder(this);
             alert.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-
 
                     srcLocation=Point.fromLngLat(originLocation.getLongitude(),originLocation.getLatitude());
                     destLocation=Point.fromLngLat(longitude,latitude);
@@ -139,7 +149,33 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
                     navigate.setEnabled(true);
                     navigate.setBackgroundResource(R.color.mapbox_blue);
 
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df1 = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+                    String date = df1.format(c.getTime());
+                    String time = df2.format(c.getTime());
 
+                    FirebaseDatabase database=FirebaseDatabase.getInstance();
+                    DatabaseReference ref=database.getReference("History").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push();
+                    ref.child("src_latitude").setValue(originLocation.getLatitude());
+                    ref.child("src_longitude").setValue(originLocation.getLongitude());
+                    ref.child("dest_latitude").setValue(latitude);
+                    ref.child("dest_longitude").setValue(longitude);
+                    //ref.child("src_address").setValue(src_add);
+                    ref.child("dest_address").setValue(dest_add);
+                    ref.child("date").setValue(date);
+                    ref.child("time").setValue(time);
+                    ref.child("contact").setValue("9865322154").addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(MainActivity2.this, "History Added", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(MainActivity2.this, "Error", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
                 }
             }).setNegativeButton("Reject", new DialogInterface.OnClickListener() {
@@ -147,7 +183,7 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
                 public void onClick(DialogInterface dialogInterface, int i) {
 
                 }
-            }).setTitle("Patient Pickup").setIcon(R.drawable.common_google_signin_btn_icon_dark).setMessage("Are you ready to Pickup at "+complete_add+"?").setCancelable(false).show();
+            }).setTitle("Patient Pickup").setIcon(R.drawable.common_google_signin_btn_icon_dark).setMessage("Are you ready to Pickup at "+dest_add+"?").setCancelable(false).show();
         }
 
         Toolbar toolbar = findViewById(R.id.toolbar121);
@@ -391,14 +427,13 @@ public class MainActivity2 extends AppCompatActivity implements NavigationView.O
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(this,DriverHistory.class));
-        } else if (id == R.id.nav_slideshow) {
-
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
-
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity2.this,LoginActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
