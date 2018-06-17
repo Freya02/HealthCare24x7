@@ -82,6 +82,8 @@ public class SignUp extends AppCompatActivity {
                             mprog.dismiss();
                             if(task.isSuccessful()){
                                 Toast.makeText(SignUp.this, "User Created", Toast.LENGTH_SHORT).show();
+                                Intent i=new  Intent(SignUp.this,LoginActivity.class);
+                                startActivity(i);
                             }
                             else{
                                 Toast.makeText(SignUp.this, "User not created", Toast.LENGTH_SHORT).show();
