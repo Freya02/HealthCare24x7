@@ -16,6 +16,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions{
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE-FIREBASE.txt'
+        exclude 'META-INF/NOTICE'
+
+    }
 }
 configurations.all {
     resolutionStrategy {
@@ -44,6 +50,9 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-locationlayer:0.5.0'
     implementation 'com.google.android.gms:play-services-base:11.0.4'
     implementation 'com.google.android.gms:play-services-location:11.0.4'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
+    compile 'com.android.support:cardview-v7:26.1.0'
+    compile 'com.firebaseui:firebase-ui-database:2.3.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
